@@ -49,7 +49,7 @@ setwd("~/Desktop/Current_Projects/Disease_Triangle")
 #       this includes area, depth and water chemeistry data
 #       I.E. each row will be a Site X Visit
 
-# Entering the two data sets
+# Entering the three data sets
 
 Site.Info.df <- read.csv( "./Data/Raw_Data/Site_Info.csv" )
 
@@ -122,8 +122,70 @@ Site.Info.df <- filter( Site.Info.df, PropName == "5 CANYONS REGIONAL PARK" |
 
 dim(Site.Info.df) ## 169 X 8 we removed 226 sites
 
+## Ok sweet I have the list of sites that I will use for the analysis this may
+## change as I am sure some of these sites have 1 visit or so but we can deal
+## with that later, this is a good place to start
+
+
+##### Wetland information data frame
+
+str( Site.Wet.df )
+
+dim( Site.Wet.df ) # 3287 X 20
+
+## So based on the wetland data set I need to seperate the assmt code to get 
+## a sitte code and date into the data but first lets clean up the dataset
+
+
+Site.Wet.df <- select( Site.Wet.df, c("AssmtCode", "PondArea..m.", 
+                                      "Perimeter..m.", "MaxDepth..m.",
+                                      "ShoreVeg_Pct", "Juncus_Pct", "Typha_Pct",
+                                      "Bullrush_Pct","Other_Pct", 
+                                      "OpenWater_Pct", "CanopyCov_Pct",
+                                      "Tree.Measure", "Dry") )
+
+# simplifying column names
+
+colnames( Site.Wet.df ) <- c("AssmtCode", "Area", 
+                             "Perim", "Depth",
+                             "ShoreVeg", "Juncus", "Typha",
+                             "Bullrush","Other", 
+                             "OpenWate", "Canopy",
+                             "Trees", "Dry")
+
+## Capitalizing all the AssmtCode
+
+Site.Wet.df$AssmtCode <- as.factor( toupper( Site.Wet.df$AssmtCode ) )
+
+## creating a dummy assmtcode to seperate the SiteCode and Date
+
+Site.Wet.df$dumAssmtCode <- Site.Wet.df$AssmtCode 
+
+
+Site.Wet.df <- Site.Wet.df %>%
+    separate( dumAssmtCode, c("SiteCode", "Date"), sep =-9) %>% 
+    separate( Date, c("Throw1", "Date"), sep =-8) %>%
+    select( -"Throw1")
+
+Site.Wet.df$SiteCode <- as.factor(Site.Wet.df$SiteCode)
+
+## ok lets filter out the unused SiteCodes
+
+dim(Site.Wet.df) # 3287 x 15
+
+Site.Wet.df <- Site.Wet.df %>%
+               filter( SiteCode %in% Site.Info.df$SiteCode )
+ 
+
+dim(Site.Wet.df) # 1872 X 15 wow, we cut out 1415 site assments
+
+unique( Site.Wet.df$SiteCode ) #165 levels how does that compare to the Sitelist
+
+unique( Site.Info.df$SiteCode ) # 169 levels, 4 SiteCodes don't have SiteAssmt
 
 ############## 2) Amphibian  host dissection data  #############
+
+
 
 # At the end of this section I will have produced 3 files,
 # 
