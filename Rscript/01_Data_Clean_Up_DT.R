@@ -169,6 +169,15 @@ Site.Wet.df <- Site.Wet.df %>%
 
 Site.Wet.df$SiteCode <- as.factor(Site.Wet.df$SiteCode)
 
+
+## Seperating by month year and date
+
+Site.Wet.df$dumDate <- as.numeric(Site.Wet.df$Date)
+
+Site.Wet.df <- Site.Wet.df %>%
+  separate( dumDate, c("Year", "DumDate"), sep = -4) %>% 
+  separate( DumDate, c("Month", "Day"), sep = 2) 
+
 ## ok lets filter out the unused SiteCodes
 
 dim(Site.Wet.df) # 3287 x 15
@@ -182,6 +191,129 @@ dim(Site.Wet.df) # 1872 X 15 wow, we cut out 1415 site assments
 unique( Site.Wet.df$SiteCode ) #165 levels how does that compare to the Sitelist
 
 unique( Site.Info.df$SiteCode ) # 169 levels, 4 SiteCodes don't have SiteAssmt
+
+
+##### data clean up site wetland info ###
+
+#Area
+hist( log10( Site.Wet.df$Area + 1 ))
+max( Site.Wet.df$Area, na.rm = T )## very large
+Site.Wet.df[which.max( Site.Wet.df$Area),] # Ca-Glake is the large site just
+                                           # going to put NA
+Site.Wet.df$Area[349] <-NA
+
+
+# Perim
+hist( log10( Site.Wet.df$Perim + 1 ))
+max( Site.Wet.df$Perim, na.rm = T )## very large
+Site.Wet.df$Perim[349] <-NA
+
+
+
+plot( x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
+
+## Several points are not lining up so lets idenify and adjust
+identify(x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
+
+## Clearly Ca-Mccry should be 10414 not 10.414
+Site.Wet.df$Area[390] <- 104140 
+
+Site.Wet.df$Area[345] <- 90000
+
+## PRKING does not have an area of 2.875, should probably be 2875
+Site.Wet.df$Area[1105] <- 2875
+
+## Ca-BN016 perimeter is off at 1390, should be 139
+Site.Wet.df$Perim[282] <-  139
+
+## BNPND011 area is off at 9087.98, should be 987.98
+Site.Wet.df$Area[162] <- 987.98
+
+## Ca-Sf31 Perimeter is wrong changing it to 
+Site.Wet.df$Perim[508] <- 22.7
+
+# Changing Mud65 area to 100 instead of 10
+Site.Wet.df$Area[405] <- 100
+
+# Changing area to 210.67 instead of just 21 
+Site.Wet.df$Area[1148] <- 210.67 
+
+# Changing area to 1260 instead of just 126
+Site.Wet.df$Area[1039] <- 1260 
+
+# Changing area from 140 to 1400
+Site.Wet.df$Area[132] <- 1400
+
+# Changing area from 69.8 to 698
+Site.Wet.df$Area[937] <- 698
+
+# Changing area from 45.6 to 457
+Site.Wet.df$Area[1081] <- 457
+
+# Changing Perimter 
+Site.Wet.df$Perim[273] <- 157
+
+# Changing Perim from 405 to 145
+Site.Wet.df$Perim[1232] <- 145
+
+## changing area from 101.1 to 1011
+Site.Wet.df$Area[1577] <- 1011
+
+# Changing area from 37.3 to 373
+Site.Wet.df$Area[1748] <- 373
+
+# Changing area from 38.8 to 138.8
+Site.Wet.df$Area[1820] <- 138.8
+
+# Changing perimeter from 209 to 109
+Site.Wet.df$Perim[628] <- 109
+
+# Changing both Perim and area
+Site.Wet.df$Perim[809] <- 154
+
+Site.Wet.df$Area[809] <- 838.3
+
+## Changing area from 166 to 1660
+Site.Wet.df$Area[1302] <- 1660
+
+# Changing Hidden area
+Site.Wet.df$Area[819] <- 1420
+
+#Changing perimeter from 211 to 111
+Site.Wet.df$Perim[1336] <- 111
+
+# Changing perimter from 232 to 132
+
+Site.Wet.df$Perim[1110] <- 132
+
+## Changing perimeter of EDWD to 230 instead of 130
+
+Site.Wet.df$Perim[326] <- 230
+
+## Changing perimeter of PRNTH2 form 55 to 155
+Site.Wet.df$Perim[1153] <- 155 
+
+
+## ok i think fixing the perimeter was the most important step, feeling good
+## about that now lets improve the rest, i think most things remaining is simply
+## adding zeros or just deleting columns,
+
+colSums(is.na(Site.Wet.df))
+
+# lets add 0s to all the NAs in the vegetation data
+Site.Wet.df$Juncus[is.na(Site.Wet.df$Juncus)] <- 0
+Site.Wet.df$Typha[is.na(Site.Wet.df$Typha)] <- 0
+Site.Wet.df$Other[is.na(Site.Wet.df$Other)] <- 0
+
+Site.df <- left_join(Site.Wet.df, Site.Info.df, by = "SiteCode")
+
+
+Play.df <- filter(Site.df,PropName ==  "JOSEPH GRANT COUNTY PARK")
+
+
+ggplot( Play.df, aes( x=Date, y=log10(Perim+1), color=SiteCode)) +
+      geom_point(size=3, alpha=.5) +geom_line() + theme_classic()+
+  theme( legend.position = "none") + facet_wrap(~SiteCode) 
 
 ############## 2) Amphibian  host dissection data  #############
 
@@ -252,4 +384,4 @@ host.info.df$SiteCode <- as.factor(toupper( host.info.df$SiteCode ))
 
 unique( host.info.df$SiteCode )
 
-  
+
