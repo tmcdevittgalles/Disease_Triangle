@@ -213,85 +213,86 @@ Site.Wet.df$Perim[349] <-NA
 plot( x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
 
 ## Several points are not lining up so lets idenify and adjust
-identify(x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
+#identify(x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
 
 ## Clearly Ca-Mccry should be 10414 not 10.414
-Site.Wet.df$Area[390] <- 104140 
 
-Site.Wet.df$Area[345] <- 90000
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-MCCRY_20170525" ] <- 104140 
+ 
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-GLAKE_20140710" ] <- 90000
 
 ## PRKING does not have an area of 2.875, should probably be 2875
-Site.Wet.df$Area[1105] <- 2875
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "PRKING_20150713" ] <- 2875
 
 ## Ca-BN016 perimeter is off at 1390, should be 139
-Site.Wet.df$Perim[282] <-  139
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-BN016_20150519" ] <-  139
 
 ## BNPND011 area is off at 9087.98, should be 987.98
-Site.Wet.df$Area[162] <- 987.98
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "BNPND011_20160802" ]  <- 987.98
 
 ## Ca-Sf31 Perimeter is wrong changing it to 
-Site.Wet.df$Perim[508] <- 22.7
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-SF31_20130722" ] <- 22.7
 
 # Changing Mud65 area to 100 instead of 10
-Site.Wet.df$Area[405] <- 100
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-MUD65_20160712" ] <- 100
 
 # Changing area to 210.67 instead of just 21 
-Site.Wet.df$Area[1148] <- 210.67 
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "PRNTH2_20160726" ] <- 210.67 
 
 # Changing area to 1260 instead of just 126
-Site.Wet.df$Area[1039] <- 1260 
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "NBOR_20180518" ] <- 1260 
 
 # Changing area from 140 to 1400
-Site.Wet.df$Area[132] <- 1400
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "BNPND002_20190710" ] <- 1400
 
 # Changing area from 69.8 to 698
-Site.Wet.df$Area[937] <- 698
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "MUD46_20140730" ] <- 698
 
 # Changing area from 45.6 to 457
-Site.Wet.df$Area[1081] <- 457
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "POGCP_20100716" ] <- 457
 
 # Changing Perimter 
-Site.Wet.df$Perim[273] <- 157
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-BN016_20100712" ] <- 157
 
 # Changing Perim from 405 to 145
-Site.Wet.df$Perim[1232] <- 145
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "PRNTHMIT_20160804" ] <- 145
 
 ## changing area from 101.1 to 1011
-Site.Wet.df$Area[1577] <- 1011
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "RLSNKGCP_20180523" ] <- 1011
 
 # Changing area from 37.3 to 373
-Site.Wet.df$Area[1748] <- 373
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "VPPND004_20140724" ] <- 373
 
 # Changing area from 38.8 to 138.8
-Site.Wet.df$Area[1820] <- 138.8
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "WDMLGCP_20160606" ] <- 138.8
 
 # Changing perimeter from 209 to 109
-Site.Wet.df$Perim[628] <- 109
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "GDPND004_20160630" ]  <- 109
 
 # Changing both Perim and area
-Site.Wet.df$Perim[809] <- 154
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "HIDDEN_20130701" ]  <- 154
 
-Site.Wet.df$Area[809] <- 838.3
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "HIDDEN_20130701" ] <- 838.3
 
 ## Changing area from 166 to 1660
-Site.Wet.df$Area[1302] <- 1660
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "PRPND003_20110519" ] <- 1660
 
 # Changing Hidden area
-Site.Wet.df$Area[819] <- 1420
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "HIDDEN_20190715" ] <- 1420
 
 #Changing perimeter from 211 to 111
-Site.Wet.df$Perim[1336] <- 111
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "PRPND004_20180710" ] <- 111
 
 # Changing perimter from 232 to 132
 
-Site.Wet.df$Perim[1110] <- 132
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "PRNTH1_20100727" ] <- 132
 
 ## Changing perimeter of EDWD to 230 instead of 130
 
-Site.Wet.df$Perim[326] <- 230
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-EDWD_20100524" ] <- 230
 
 ## Changing perimeter of PRNTH2 form 55 to 155
-Site.Wet.df$Perim[1153] <- 155 
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "PRNTH2_20190611" ] <- 155 
 
 
 ## ok i think fixing the perimeter was the most important step, feeling good
@@ -305,15 +306,95 @@ Site.Wet.df$Juncus[is.na(Site.Wet.df$Juncus)] <- 0
 Site.Wet.df$Typha[is.na(Site.Wet.df$Typha)] <- 0
 Site.Wet.df$Other[is.na(Site.Wet.df$Other)] <- 0
 
+## Combinding the two data frames
 Site.df <- left_join(Site.Wet.df, Site.Info.df, by = "SiteCode")
 
 
-Play.df <- filter(Site.df,PropName ==  "JOSEPH GRANT COUNTY PARK")
+
+##### data clean up site water chemistry info info ###
+
+str( Site.Water.df )
+
+dim( Site.Water.df ) # 3174 X 24
+
+## So based on the wetland data set I need to seperate the assmt code to get 
+## a sitte code and date into the data but first lets clean up the dataset
 
 
-ggplot( Play.df, aes( x=Date, y=log10(Perim+1), color=SiteCode)) +
-      geom_point(size=3, alpha=.5) +geom_line() + theme_classic()+
-  theme( legend.position = "none") + facet_wrap(~SiteCode) 
+Site.Water.df <- select( Site.Water.df, c("AssmtCode", "Conductivity..uS.cm.", 
+                                      "TDS..g.l.", "Salinity",
+                                      "pH", "Turbidity", "SecchiDepth..cm.",
+                                      "NutrientSamples","TotalN..uMOLES.L.", 
+                                      "TotalP..uMOLES.L.", "DOC.mg.C.L",
+                                      "NH4...uEQ.L.", "DON..uM.L.",
+                                      "PO4.3...uEQ.L.","IP..uM.L.",
+                                      "DOP..uM.L.", "NO3..uEQ.L.",
+                                      "IN..uM.L.") )
+
+# simplifying column names
+
+colnames( Site.Water.df ) <- c("AssmtCode", "Conduct", 
+                               "TDS", "Salinity",
+                               "pH", "Turbid", "Secchi",
+                               "NutrientSamples","TotalN", 
+                               "TotalP", "DOC",
+                               "NH4", "DON",
+                               "PO4","IP",
+                               "DOP", "NO3",
+                               "IN")
+
+## Capitalizing all the AssmtCode
+
+Site.Water.df $AssmtCode <- as.factor( toupper( Site.Water.df$AssmtCode ) )
+
+## creating a dummy assmtcode to seperate the SiteCode and Date
+
+Site.Water.df$dumAssmtCode <- Site.Water.df$AssmtCode 
+
+
+Site.Water.df <- Site.Water.df %>%
+  separate( dumAssmtCode, c("SiteCode", "Date"), sep =-9) %>% 
+  separate( Date, c("Throw1", "Date"), sep =-8) %>%
+  select( -"Throw1")
+
+Site.Water.df$SiteCode <- as.factor(Site.Water.df$SiteCode)
+
+
+## Seperating by month year and date
+
+Site.Water.df$dumDate <- as.numeric(Site.Water.df$Date)
+
+Site.Water.df <- Site.Water.df %>%
+  separate( dumDate, c("Year", "DumDate"), sep = -4) %>% 
+  separate( DumDate, c("Month", "Day"), sep = 2) 
+
+## ok lets filter out the unused SiteCodes
+
+dim(Site.Water.df) # 3174 x 20
+
+Site.Water.df <-Site.Water.df %>%
+  filter( SiteCode %in% Site.Info.df$SiteCode )
+
+
+dim(Site.Water.df) # 1836 X 20 wow, we cut out 1338 site assments
+
+unique( Site.Water.df$SiteCode ) #165 levels how does that compare to the Sitelist
+
+unique( Site.Info.df$SiteCode ) # 169 levels, 4 SiteCodes don't have SiteAssmt
+
+## cool lets clean up so data
+
+##first lets look at the relationship betweem conductivity and salinity
+
+hist( log10(Site.Water.df$TotalP+1 ))
+
+plot( x = log10(Site.Water.df$Conduct+1), log10(Site.Water.df$TDS+1))
+
+ggplot( Site.Water.df, aes(x = log10(Conduct+1), log10(TDS+1),color=Year))+
+  geom_point(size=2, alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+  legend.text=element_text(size=18), 
+  legend.title=element_text( size=18)) + facet_wrap(~Year)
 
 ############## 2) Amphibian  host dissection data  #############
 
