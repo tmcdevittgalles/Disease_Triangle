@@ -200,26 +200,29 @@ hist( log10( Site.Wet.df$Area + 1 ))
 max( Site.Wet.df$Area, na.rm = T )## very large
 Site.Wet.df[which.max( Site.Wet.df$Area),] # Ca-Glake is the large site just
                                            # going to put NA
-Site.Wet.df$Area[349] <-NA
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-GLAKE_20150804"] <-NA
 
 
 # Perim
 hist( log10( Site.Wet.df$Perim + 1 ))
 max( Site.Wet.df$Perim, na.rm = T )## very large
-Site.Wet.df$Perim[349] <-NA
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-GLAKE_20150804"] <-NA
 
 
 
 plot( x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
 
 ## Several points are not lining up so lets idenify and adjust
-#identify(x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
+identify(x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
 
 ## Clearly Ca-Mccry should be 10414 not 10.414
 
-Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-MCCRY_20170525" ] <- 104140 
- 
-Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-GLAKE_20140710" ] <- 90000
+Site.Wet.df$Area[Site.Wet.df$AssmtCode == "CA-MCCRY_20170525" ] <- 10414 
+Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-MCCRY_20170525" ] <- 550 
+
+# Glake is just too weird i am goin to pu NA for all measurements
+Site.Wet.df$Area[Site.Wet.df$SiteCode == "CA-GLAKE" ] <- NA
+Site.Wet.df$Perim[Site.Wet.df$SiteCode == "CA-GLAKE" ] <- NA
 
 ## PRKING does not have an area of 2.875, should probably be 2875
 Site.Wet.df$Area[Site.Wet.df$AssmtCode == "PRKING_20150713" ] <- 2875
@@ -295,6 +298,7 @@ Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "CA-EDWD_20100524" ] <- 230
 Site.Wet.df$Perim[Site.Wet.df$AssmtCode == "PRNTH2_20190611" ] <- 155 
 
 
+plot( x= log10(Site.Wet.df$Area+1), y= log10(Site.Wet.df$Perim + 1))
 ## ok i think fixing the perimeter was the most important step, feeling good
 ## about that now lets improve the rest, i think most things remaining is simply
 ## adding zeros or just deleting columns,
@@ -309,7 +313,132 @@ Site.Wet.df$Other[is.na(Site.Wet.df$Other)] <- 0
 ## Combinding the two data frames
 Site.df <- left_join(Site.Wet.df, Site.Info.df, by = "SiteCode")
 
+## Ok lets check to make sure there are no outliers in perimeter or area
+## for sites that only have one of these measurements
 
+filter( Site.df, PropName == "5 CANYONS REGIONAL PARK")  %>%
+      ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+      facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "5 CANYONS REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## 5 canyon looks good
+
+## Silver oaks
+
+filter( Site.df, PropName == "SILVER OAKS OSTRICH FARM")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "SILVER OAKS OSTRICH FARM")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## Early Barn perim and area seem high but probably a measurement issue not a 
+## data issue
+
+## Blue Oaks
+
+filter( Site.df, PropName == "BLUE OAKS RANCH RESERVE")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "BLUE OAKS RANCH RESERVE")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## Blue Oaks looks good
+
+## Grant
+                                                   
+filter( Site.df, PropName == "JOSEPH GRANT COUNTY PARK")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "JOSEPH GRANT COUNTY PARK")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## Grant is looking good, lots of variation , kind of loving it 
+
+## Briones RP
+
+filter( Site.df, PropName == "BRIONES REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "BRIONES REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+
+# Brinoes 003 early perimenter is way off change from 1212 to 121
+
+Site.df$Perim[Site.df$AssmtCode == "CA-BN003_20100713" ]  <- 121
+
+
+## EBMUD
+
+filter( Site.df, PropName == "EAST BAY MUNICIPAL UTILITY DISTRICT SAN PABLO RESERVOIR")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "EAST BAY MUNICIPAL UTILITY DISTRICT SAN PABLO RESERVOIR")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## MUD is looking good
+
+## San Felipe 
+
+filter( Site.df, PropName == "SAN FELIPE RANCH")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "SAN FELIPE RANCH")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## looking good San Felipe
+
+## Pleasanton RP
+
+filter( Site.df, PropName == "PLEASANTON RIDGE REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "PLEASANTON RIDGE REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## PRPDN005 early is wrong, lets fix that should be 83 in steado f 283
+
+Site.df$Perim[Site.df$AssmtCode == "PRPND005_20100729" ]  <- 83
+Site.df$Area[Site.df$AssmtCode == "PRPND005_20100729" ]  <- 473
+
+## Garin Dry Creek RP
+
+filter( Site.df, PropName == "GARIN/DRY CREEK PIONEER REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "GARIN/DRY CREEK PIONEER REGIONAL PARK")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+## Garin looks good , man do i hate GDPND010
+
+## Vargus RP
+
+filter( Site.df, PropName == "VARGAS PLATEAU REGIONAL PRESERVE")  %>%
+  ggplot(aes(x =Date, y = Perim, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
+
+filter( Site.df, PropName == "VARGAS PLATEAU REGIONAL PRESERVE")  %>%
+  ggplot(aes(x =Date, y = Area, color=SiteCode ))+ geom_point(size=3)+
+  facet_wrap(~SiteCode) + theme_classic() + theme( legend.position = "none")
 
 ##### data clean up site water chemistry info info ###
 
@@ -395,6 +524,146 @@ ggplot( Site.Water.df, aes(x = log10(Conduct+1), log10(TDS+1),color=Year))+
   theme(legend.key.size = unit(1, "cm"),
   legend.text=element_text(size=18), 
   legend.title=element_text( size=18)) + facet_wrap(~Year)
+
+ggplot( Site.Water.df, aes(x = log10(Conduct+1), log10(Salinity+1),color=Year))+
+  geom_point(size=2, alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year)
+
+ggplot( Site.Water.df, aes(x = log10(TDS+1), log10(Salinity+1),color=Year))+
+  geom_point(size=2, alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year)
+
+ggplot( Site.Water.df, aes(x = log10(TotalP+1), log10(TotalN+1),color=Year))+
+  geom_point(size=2, alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year)
+
+## Ok lets beging to look at density plots
+
+## Turbidity ##
+ggplot( Site.Water.df, aes( log10(Turbid +1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year)
+
+## Turbidity looking pretty good, some potentialyl interesting results
+
+## PH ##
+ggplot( Site.Water.df, aes( pH ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+## ph looking good
+
+## Conductivity ##
+ggplot( Site.Water.df, aes( log10(Conduct+1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+## Conductivity looking constant
+ 
+## Salinity ##
+
+ggplot( Site.Water.df, aes( log10(Salinity+1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+## hmm not just a a potneital shift in unit but also distributuion, more
+## broad in later years
+
+## TDS ##
+
+ggplot( Site.Water.df, aes( log10(TDS+1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+## Similare patterns with TDS as with Salinity , probably connected or at least
+## similare issue, hopefully one fix for all 
+
+## TotalN
+
+ggplot( Site.Water.df, aes( log10(TotalN+1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+## looking normal
+
+## TotalP
+
+ggplot( Site.Water.df, aes( log10(TotalP+1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+## looking normal expter for 2012 i wonder how much these daynamics are based
+## on when the data is collected 
+
+ggplot( Site.Water.df, aes( log10(DOC+1) ,fill=Year))+
+  geom_density( alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year) + 
+  theme( legend.position = "none")
+
+
+## Ok i am going to assume most of the nutrient data is consitent since we 
+## dont run it so happy to move on
+
+## lets combind all the data shall we and first lets simplify the data set we
+## want
+
+
+
+Site.df <- Site.Water.df %>% 
+      select( c("AssmtCode","Conduct","TDS" ,"Salinity","pH" ,            
+                 "Turbid"  ,"Secchi", "NutrientSamples" ,"TotalN" , "TotalP"  ,      
+                 "DOC" , "NH4", "DON","PO4" , "IP"    ,         
+                "DOP","NO3" , "IN" ) ) %>%
+          right_join(Site.df, by = "AssmtCode")
+
+at1 <- Site.df
+
+at1$TDS[at1$Year == 2009 ] <-  at1$TDS[at1$Year == 2009 ] * 1000
+at1$TDS[at1$Year == 2010 ] <-  at1$TDS[at1$Year == 2010 ] * 1000
+at1$TDS[at1$Year == 2011 ] <-  at1$TDS[at1$Year == 2011 ] * 1000
+at1$TDS[at1$Year == 2012 ] <-  at1$TDS[at1$Year == 2012 ] * 1000
+at1$TDS[at1$Year == 2013 ] <-  at1$TDS[at1$Year == 2013 ] * 1000
+at1$TDS[at1$Year == 2014 ] <-  at1$TDS[at1$Year == 2014 ] * 1000
+
+ggplot( at1, aes(x = log10(Conduct+1), log10(TDS+1),color=Year))+
+  geom_point(size=2, alpha=.5)+ theme_classic() +
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year)
+
+ggplot( Site.df, aes(x = log10( Conduct+1 ), log10( TDS + 1 ), color=Year))+
+  geom_point(size=2, alpha=.5)+ theme_classic() + 
+  theme(legend.key.size = unit(1, "cm"),
+        legend.text=element_text(size=18), 
+        legend.title=element_text( size=18)) + facet_wrap(~Year)
 
 ############## 2) Amphibian  host dissection data  #############
 
